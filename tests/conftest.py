@@ -1,7 +1,10 @@
 import pytest
 from selenium import webdriver
 
+from pages.basket_page import BasketPage
+from pages.login_page import LoginPage
 from pages.main_page import MainPage
+from pages.product_page import ProductPage
 
 
 def pytest_addoption(parser):
@@ -27,7 +30,6 @@ def browser(request):
     )
 
     driver = webdriver.Chrome(options=driver_options)
-    driver.user_language = user_language
     yield driver
 
     print("\nQuit browser")
@@ -37,3 +39,18 @@ def browser(request):
 @pytest.fixture()
 def main_page(browser):
     return MainPage(browser)
+
+
+@pytest.fixture()
+def login_page(browser):
+    return LoginPage(browser)
+
+
+@pytest.fixture()
+def product_page(browser):
+    return ProductPage(browser)
+
+
+@pytest.fixture()
+def basket_page(browser):
+    return BasketPage(browser)
