@@ -24,9 +24,24 @@ def browser(request):
     print("\nStart browser for test")
 
     driver_options = webdriver.ChromeOptions()
+
+    driver_options.add_argument("--window-size=1920,1080")
+    driver_options.add_argument("--disable-blink-features=AutomationControlled")
+    driver_options.add_argument("--headless=new")
+
+    driver_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+
     user_language = request.config.getoption("--language")
+
     driver_options.add_experimental_option(
-        "prefs", {"intl.accept_languages": user_language}
+        "prefs",
+        {
+            "intl.accept_languages": user_language,
+            "credentials_enable_service": False,
+            "profile.password_manager_enabled": False,
+            "autofill.profile_enabled": False,
+            "autofill.credit_card_enabled": False,
+        },
     )
 
     driver = webdriver.Chrome(options=driver_options)
@@ -54,3 +69,10 @@ def product_page(browser):
 @pytest.fixture()
 def basket_page(browser):
     return BasketPage(browser)
+
+
+@pytest.fixture()
+def authorized_user(browser, login_page):
+    login_page.open_login_page()
+    login_page.register_new_user()
+    login_page.should_be_authorized_user()

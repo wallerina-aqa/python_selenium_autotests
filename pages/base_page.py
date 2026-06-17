@@ -19,6 +19,8 @@ class BasePage:
         self.LOGIN_LINK_LOCATOR = ("css selector", "#login_link")
         self.VIEW_BASKET_LINK_LOCATOR = ("css selector", ".basket-mini a")
 
+        self.USER_ICON_LOCATOR = ("css selector", ".icon-user")
+
     def open(self, url):
         self.BROWSER.get(url)
 
@@ -68,6 +70,12 @@ class BasePage:
     @allure.step("Click View basket link")
     def click_view_basket_link(self):
         self.view_basket_link.click()
+
+    @allure.step("Assert user icon is displayed")
+    def should_be_authorized_user(self):
+        assert self.is_element_present(
+            *self.USER_ICON_LOCATOR
+        ), "User icon is not displayed, probably unauthorised user"
 
     @allure.step("Solve quiz and send code in alert")
     def solve_quiz_and_send_code(self):
